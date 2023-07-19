@@ -6,6 +6,7 @@ import com.techpro.twitter.repositories.PostRepo;
 import com.techpro.twitter.repositories.UserRepo;
 import com.techpro.twitter.requests.PostRequest;
 import com.techpro.twitter.services.PostService;
+import com.techpro.twitter.services.exceptions.PostNotFoundException;
 import com.techpro.twitter.services.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllUserPosts(Long userId) {
         return postRepo.findAllByUser_id(userId);
+    }
+
+    @Override
+    public Post getPostById(Long id) throws PostNotFoundException {
+        Optional<Post> postOptional = postRepo.findById(id);
+        if (postOptional.isPresent()) {
+            return postOptional.get();
+        } else {
+            throw new PostNotFoundException("Post could not found with id: " + id);
+        }
     }
 }

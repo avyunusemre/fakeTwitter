@@ -4,10 +4,11 @@ import com.techpro.twitter.entities.User;
 import com.techpro.twitter.services.exceptions.UserAlreadyExistException;
 import com.techpro.twitter.services.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
-@Service
+@Validated
 public interface UserService {
     List<User> getAllUser();
 
