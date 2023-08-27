@@ -45,10 +45,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long addNewuser(User saveToUser) throws UserAlreadyExistException {
-        if (userRepo.findByEmail(saveToUser.getEmail()).isPresent()) {
-            throw new UserAlreadyExistException("User with email:" + saveToUser.getEmail() + " is already exist");
+    public Long addNewUser(User userToSave) throws UserAlreadyExistException {
+        if (userRepo.findByEmail(userToSave.getEmail()).isPresent()) {
+            throw new UserAlreadyExistException("User with email:" + userToSave.getEmail() + " is already exist");
         }
-        return userRepo.save(saveToUser).getId();
+        return userRepo.save(userToSave).getId();
     }
 }

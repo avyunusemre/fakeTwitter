@@ -7,5 +7,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class CommentRequest {
     String text;
-    Long post_id;
+    Long postId;
+    Long userId;
 }
