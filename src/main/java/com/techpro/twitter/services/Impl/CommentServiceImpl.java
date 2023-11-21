@@ -6,11 +6,14 @@ import com.techpro.twitter.entities.User;
 import com.techpro.twitter.repositories.CommentRepo;
 import com.techpro.twitter.requests.CommentRequest;
 import com.techpro.twitter.services.CommentService;
+import com.techpro.twitter.services.exceptions.CommentNotFoundException;
 import com.techpro.twitter.services.exceptions.PostNotFoundException;
 import com.techpro.twitter.services.exceptions.UserNotFoundException;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -27,6 +30,7 @@ public class CommentServiceImpl implements CommentService {
         this.userService = userService;
     }
 
+    @Nullable
     @Override
     public Long addComment(CommentRequest commentRequest) throws PostNotFoundException, UserNotFoundException {
         Post post = postService.getPostById(commentRequest.getPostId());
@@ -42,9 +46,33 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    @Nullable
     @Override
     public List<Comment> getCommentsForPost(Long postId) throws PostNotFoundException {
         Post post = postService.getPostById(postId);
-        return commentRepo.findAllByPost_id(postId);
+        if (post != null) {
+            return commentRepo.findAllByPost_id(postId);
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public List<Comment> getCommentsForUser(Long userId) throws UserNotFoundException {
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            return commentRepo.findAllByUser_id(userId);
+        }
+        return null;
+    }
+
+    @Override
+    public Comment getCommentById(Long commentId) throws CommentNotFoundException {
+        Optional<Comment> commentOptional = commentRepo.findById(commentId);
+        if (commentOptional.isPresent()) {
+            return commentOptional.get();
+        } else {
+            throw new CommentNotFoundException("Comment with id: " + commentId + " couldn't find.");
+        }
     }
 }

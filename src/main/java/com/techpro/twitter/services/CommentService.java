@@ -2,6 +2,7 @@ package com.techpro.twitter.services;
 
 import com.techpro.twitter.entities.Comment;
 import com.techpro.twitter.requests.CommentRequest;
+import com.techpro.twitter.services.exceptions.CommentNotFoundException;
 import com.techpro.twitter.services.exceptions.PostNotFoundException;
 import com.techpro.twitter.services.exceptions.UserNotFoundException;
 import org.springframework.validation.annotation.Validated;
@@ -14,4 +15,8 @@ public interface CommentService {
     Long addComment(CommentRequest commentRequest) throws PostNotFoundException, UserNotFoundException;
 
     List<Comment> getCommentsForPost(Long postId) throws PostNotFoundException;
+
+    List<Comment> getCommentsForUser(Long userId) throws UserNotFoundException;
+
+    Comment getCommentById(Long commentId) throws CommentNotFoundException;
 }
